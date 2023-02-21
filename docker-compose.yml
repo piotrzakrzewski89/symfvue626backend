@@ -1,0 +1,42 @@
+version: '3'
+services:
+    php:
+        build: ./docker/php
+        container_name: php
+        volumes:
+            - ./:/app
+            - './docker/php/conf.d:/usr/local/etc/php/conf.d'
+            - 'php_composer_data:/root/.composer'
+        networks:
+            - network
+    www:
+        build: ./docker/www
+        container_name: www
+        ports:
+            - 80:80
+        volumes:
+            - ./:/app
+            - ./docker/www/conf.d:/etc/nginx/conf.d
+        networks:
+            - network
+
+    db:
+        image: "mariadb:latest"
+        command: mysqld --sql_mode="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" --default-authentication-plugin=mysql_native_password
+        volumes:
+            - db_maria_data:/var/lib/mysql
+        networks:
+            - network
+        ports:
+            - 3306:3306
+        environment:
+            - TZ=UTC
+            - MYSQL_ROOT_PASSWORD=root
+
+volumes:
+    db_data:
+    db_maria_data:
+    php_composer_data:
+
+networks:
+    network: null
