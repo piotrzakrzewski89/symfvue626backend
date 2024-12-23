@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CheckController extends AbstractController
 {
-    #[Route('/api/check', name: 'app_check', methods: 'GET')]
+    #[Route('/check', name: 'app_check', methods: 'GET')]
     public function index(): JsonResponse
     {
         return $this->json(
